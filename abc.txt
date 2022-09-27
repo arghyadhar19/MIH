@@ -1,0 +1,131 @@
+ <?php
+                    if(count($errors) == 1){
+                        ?>
+                        <div class="alert alert-danger text-center">
+                            <?php
+                            foreach($errors as $showerror){
+                                echo $showerror;
+                            }
+                            ?>
+                        </div>
+                        <?php
+                    }elseif(count($errors) > 1){
+                        ?>
+                        <div class="alert alert-danger">
+                            <?php
+                            foreach($errors as $showerror){
+                                ?>
+                                <li><?php echo $showerror; ?></li>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                        <?php
+                    }
+                    ?>
+!.....................................................................
+		    if($password !== $cpassword){
+        $errors['password'] = "Confirm password not matched!";
+    }
+    $email_check = "SELECT * FROM usertable WHERE email = '$email'";
+    $res = mysqli_query($con, $email_check);
+    if(mysqli_num_rows($res) > 0){
+        $errors['email'] = "Email that you have entered is already exist!";
+    }
+    $AN_check = "SELECT * FROM usertable WHERE AN = '$AN'";
+    $res = mysqli_query($con, $AN_check);
+    if(mysqli_num_rows($res) > 0){
+        $errors['AN'] = "AADHAR Number that you have entered is already exist!";
+    }
+    $ph_check = "SELECT * FROM usertable WHERE ph = '$ph'";
+    $res = mysqli_query($con, $ph_check);
+    if(mysqli_num_rows($res) > 0){
+        $errors['ph'] = "Phone Number that you have entered is already exist!";
+    }
+    if(count($errors) === 0){
+        $encpass = password_hash($password, PASSWORD_BCRYPT);
+        $code = rand(999999, 111111);
+        $status = "notverified";
+
+	  $subject = "Email Verification Code";
+            $message = "Your verification code is $code";
+            $sender = "From:playingwithlens554@gmail.com";
+            if(mail($email, $subject, $message, $sender)){
+                $info = "We've sent a verification code to your email - $email";
+                $_SESSION['info'] = $info;
+                $_SESSION['email'] = $email;
+                $_SESSION['password'] = $password;
+                header('location: user-otp.php');
+                exit();
+            }else{
+                $errors['otp-error'] = "Failed while sending code!";
+            }
+        }else{
+            $errors['db-error'] = "Failed while inserting data into database!";
+        }
+
+        <div class="container">
+        <div class="para">
+            <p><strong>Great! You have completed <span>80%</span></strong></p>
+            <p>Write something interesting about you ( in brief )</p>
+        </div>
+
+        <div class="form">
+            <form>
+
+                <label for="about"></label>
+                <textarea name="about" id="about" cols="30" rows="10"></textarea>
+
+                <p>This will be your profile's <strong>DESCRIPTION</strong></p>
+
+            </form>
+        </div>
+    </div>
+................................
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Algerian:400,500,600,700&display=swap');
+    nav{
+        padding-left: 100px!important;
+        padding-right: 100px!important;
+        background: black;
+        font-family: 'Algerian', sans-serif;
+    } 
+    nav a.navbar-brand{
+        color: #fff;
+        font-size: 30px!important;
+        font-weight: 500;
+    }
+    button a{
+        color: #6665ee;
+        font-weight: 500;
+    }
+    button a:hover{
+        text-decoration: none;
+    }
+    h1{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        text-align: center;
+        transform: translate(-50%, -50%);
+        font-size: 50px;
+        font-weight: 600;
+    }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+    <a class="navbar-brand" href="#">MIH MATRIMONY</a>
+    <button type="button" class="btn btn-light"><a href="logout-user.php">Logout</a></button>
+    </nav>
+     $run_query = mysqli_query($con, $update_pass);
+        if ($run_query) {
+            $info = "Your password changed. Now you can login with your new password.";
+            $_SESSION['info'] = $info;
+            header('Location: password-changed.php');
+        } else {
+            $errors['db-error'] = "Failed to change your password!";
+        }
